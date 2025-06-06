@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Yoot Tower</title>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+    #build-menu {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #eee;
+      display: flex;
+      gap: 10px; /* Space between buttons */
+    }
+    #build-menu button {
+      padding: 8px 12px;
+      border: 1px solid #000;
+      cursor: pointer;
+    }
+    #game-container {
+      border: 1px solid black;
+      /* Width and height will be set by game.js based on tile size */
+    }
+  </style>
+</head>
+<body>
+  <h1>Yoot Tower</h1>
+  <div id="build-menu">
+    <button id="build-lobby">Build Lobby</button>
+    <button id="build-standard-floor">Build Standard Floor</button>
+    <button id="build-office">Build Office</button>
+    <button id="build-fast-food">Build Fast Food</button>
+    <button id="build-elevator">Build Elevator Shaft</button>
+    <p style="margin-left: auto;">Money: <span id="player-money-display">100000</span></p>
+  </div>
+  <div id="game-container"></div>
+  <script src="game.js"></script>
+</body>
+</html>
