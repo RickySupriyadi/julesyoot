@@ -4,23 +4,49 @@
   <title>Yoot Tower</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #87CEEB, #4682B4);
+      background-attachment: fixed;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #FFFFFF;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
     #build-menu {
-      margin-bottom: 10px;
       padding: 10px;
-      background-color: #eee;
+      background-color: #e9e9e9;
       display: flex;
-      gap: 10px; /* Space between buttons */
+      gap: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin: 20px auto;
+      width: fit-content;
     }
     #build-menu button {
       padding: 8px 12px;
       border: 1px solid #000;
       cursor: pointer;
+      background-color: #fff; /* Give buttons a default bg */
+    }
+    #build-menu button:hover {
+      background-color: #f0f0f0; /* Slight hover effect */
     }
     #game-container {
       border: 1px solid black;
-      /* Width and height will be set by game.js based on tile size */
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 5px;
+      border-radius: 5px;
+      margin: 20px auto;
+      /* display, gridTemplateColumns, gridTemplateRows are set by JS */
+    }
+    /* Ensure player money display is legible */
+    #build-menu p {
+        color: #333;
+        align-self: center; /* Vertically align with buttons */
     }
   </style>
 </head>

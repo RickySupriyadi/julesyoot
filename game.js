@@ -60,21 +60,21 @@ function updateUIDisplay() {
     if (moneyDisplay) {
         moneyDisplay.textContent = playerMoney;
     }
-    // Can update other UI elements here later (population, day, etc.)
 }
 
 function updateBuildButtonUI() {
     for (const type in buildingButtons) {
         if (buildingButtons[type]) {
-            buildingButtons[type].style.backgroundColor = '';
+            buildingButtons[type].style.backgroundColor = ''; // Handled by CSS now mostly
             buildingButtons[type].style.border = '1px solid #000';
             buildingButtons[type].style.fontWeight = 'normal';
         }
     }
     if (selectedBuildingType && buildingButtons[selectedBuildingType]) {
-        buildingButtons[selectedBuildingType].style.backgroundColor = '#a0a0a0';
+        // buildingButtons[selectedBuildingType].style.backgroundColor = '#a0a0a0'; // CSS handles hover, JS for selected state
         buildingButtons[selectedBuildingType].style.border = '2px solid #000';
         buildingButtons[selectedBuildingType].style.fontWeight = 'bold';
+         // Consider adding a specific class for selected state in CSS instead of direct style manipulation
     }
 }
 
@@ -100,7 +100,7 @@ function initializeBuildMenu() {
         }
     }
     updateBuildButtonUI();
-    updateUIDisplay(); // Initial call to show starting money
+    updateUIDisplay();
 }
 
 function handleTileClick(row, col) {
@@ -163,6 +163,7 @@ function renderTower() {
       tileDiv.style.justifyContent = 'center';
       tileDiv.style.fontSize = `${TILE_SIZE / 3}px`;
       tileDiv.style.overflow = 'hidden';
+      tileDiv.style.color = '#333333'; // Standardized text color for tiles
 
       const buildingType = towerGrid[r][c];
       let tileText = "";
@@ -215,11 +216,11 @@ function updateEconomy(currentTime) {
 
     playerMoney += currentCycleIncome - currentCycleExpenses;
     console.log(`Economy Update: Income: ${currentCycleIncome}, Expenses: ${currentCycleExpenses}, Net: ${currentCycleIncome - currentCycleExpenses}, New Balance: ${playerMoney}`);
-    updateUIDisplay(); // Update money display
+    updateUIDisplay();
 }
 
 
-function updateGame(currentTime) { // currentTime is passed from gameLoop
+function updateGame(currentTime) {
     // console.log(`Updating game state - Yoots count: ${yoots.length}`);
     // for (const yoot of yoots) {
     //    console.log(`Yoot ID: ${yoot.id}, State: ${yoot.state}, Location: F${yoot.currentFloor}[${yoot.currentRow}][${yoot.currentCol}]`);
@@ -227,8 +228,8 @@ function updateGame(currentTime) { // currentTime is passed from gameLoop
     updateEconomy(currentTime);
 }
 
-function gameLoop(timestamp) { // timestamp is provided by requestAnimationFrame
-  updateGame(timestamp); // Pass timestamp to updateGame
+function gameLoop(timestamp) {
+  updateGame(timestamp);
   renderTower();
   requestAnimationFrame(gameLoop);
 }
@@ -239,7 +240,6 @@ window.onload = () => {
   setTimeout(() => {
       spawnYoot();
   }, 2000);
-  // Initialize lastEconomyUpdateTime to avoid immediate large catch-up if game was paused
   lastEconomyUpdateTime = performance.now();
-  gameLoop(performance.now()); // Start gameLoop with initial timestamp
+  gameLoop(performance.now());
 };
