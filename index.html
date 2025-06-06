@@ -27,13 +27,21 @@
       width: fit-content;
     }
     #build-menu button {
-      padding: 8px 12px;
-      border: 1px solid #000;
+      padding: 4px 8px; /* Reduced padding */
+      border: 1px solid #ccc; /* Lighter border for non-selected */
+      border-radius: 4px;
+      background-color: #fff;
       cursor: pointer;
-      background-color: #fff; /* Give buttons a default bg */
+      margin: 4px; /* Slightly adjusted margin */
+      font-size: 0.9em; /* Reduced font size */
     }
     #build-menu button:hover {
-      background-color: #f0f0f0; /* Slight hover effect */
+      background-color: #f0f0f0;
+    }
+    #build-menu button.selected {
+      background-color: #d0d0d0;
+      border-color: #999; /* Darker border for selected */
+      font-weight: bold;
     }
     #game-container {
       border: 1px solid black;

@@ -65,16 +65,11 @@ function updateUIDisplay() {
 function updateBuildButtonUI() {
     for (const type in buildingButtons) {
         if (buildingButtons[type]) {
-            buildingButtons[type].style.backgroundColor = ''; // Handled by CSS now mostly
-            buildingButtons[type].style.border = '1px solid #000';
-            buildingButtons[type].style.fontWeight = 'normal';
+            buildingButtons[type].classList.remove('selected');
         }
     }
     if (selectedBuildingType && buildingButtons[selectedBuildingType]) {
-        // buildingButtons[selectedBuildingType].style.backgroundColor = '#a0a0a0'; // CSS handles hover, JS for selected state
-        buildingButtons[selectedBuildingType].style.border = '2px solid #000';
-        buildingButtons[selectedBuildingType].style.fontWeight = 'bold';
-         // Consider adding a specific class for selected state in CSS instead of direct style manipulation
+        buildingButtons[selectedBuildingType].classList.add('selected');
     }
 }
 
@@ -99,7 +94,7 @@ function initializeBuildMenu() {
             console.warn(`Button with ID ${buttonIds[type]} not found.`);
         }
     }
-    updateBuildButtonUI();
+    updateBuildButtonUI(); // Initial call to ensure no buttons are selected at start
     updateUIDisplay();
 }
 
@@ -163,7 +158,7 @@ function renderTower() {
       tileDiv.style.justifyContent = 'center';
       tileDiv.style.fontSize = `${TILE_SIZE / 3}px`;
       tileDiv.style.overflow = 'hidden';
-      tileDiv.style.color = '#333333'; // Standardized text color for tiles
+      tileDiv.style.color = '#333333';
 
       const buildingType = towerGrid[r][c];
       let tileText = "";
