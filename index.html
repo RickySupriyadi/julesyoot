@@ -1,77 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Yoot Tower</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #87CEEB, #4682B4);
-      background-attachment: fixed;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      color: #FFFFFF;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-    #build-menu {
-      padding: 10px;
-      background-color: #e9e9e9;
-      display: flex;
-      gap: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin: 20px auto;
-      width: fit-content;
-    }
-    #build-menu button {
-      padding: 4px 8px; /* Reduced padding */
-      border: 1px solid #ccc; /* Lighter border for non-selected */
-      border-radius: 4px;
-      background-color: #fff;
-      cursor: pointer;
-      margin: 4px; /* Slightly adjusted margin */
-      font-size: 0.9em; /* Reduced font size */
-    }
-    #build-menu button:hover {
-      background-color: #f0f0f0;
-    }
-    #build-menu button.selected {
-      background-color: #d0d0d0;
-      border-color: #999; /* Darker border for selected */
-      font-weight: bold;
-    }
-    #game-container {
-      border: 1px solid black;
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 5px;
-      border-radius: 5px;
-      margin: 20px auto;
-      width: 800px; /* Default width */
-      height: 600px; /* Default height */
-      /* display, gridTemplateColumns, gridTemplateRows are set by JS */
-      /* overflow: hidden; */ /* Optional: if content ever exceeds fixed size */
-    }
-    /* Ensure player money display is legible */
-    #build-menu p {
-        color: #333;
-        align-self: center; /* Vertically align with buttons */
-    }
-  </style>
-</head>
-<body>
-  <h1>Yoot Tower</h1>
-  <div id="build-menu">
-    <button id="build-lobby">Build Lobby</button>
-    <button id="build-standard-floor">Build Standard Floor</button>
-    <button id="build-office">Build Office</button>
-    <button id="build-fast-food">Build Fast Food</button>
-    <button id="build-elevator">Build Elevator Shaft</button>
-    <p style="margin-left: auto;">Money: <span id="player-money-display">100000</span></p>
-  </div>
-  <div id="game-container"></div>
-  <script src="game.js"></script>
-</body>
+<!-- index.html -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Vertical City Tycoon (Phaser.js Starter)</title>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background: #000;
+            }
+            #game-container {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="game-container"></div>
+
+        <!-- Phaser 3 library (CDN) -->
+        <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
+        <!-- Main game code -->
+        <script src="main.js"></script>
+    </body>
 </html>
