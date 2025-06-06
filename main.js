@@ -21,6 +21,28 @@ const config = {
   scene: [PreloadScene, MainScene],
 };
 
+// Copied from game.js
+const BUILDING_INCOME = {
+    "office": 50,
+    "fast-food": 30,
+};
+
+const BUILDING_MAINTENANCE = {
+    "lobby": 5,
+    "standard-floor": 5,
+    "office": 10,
+    "fast-food": 8,
+    "elevator": 15
+};
+
+const buildingColors = {
+    "lobby": '#FFFF99',
+    "standard-floor": '#ADD8E6',
+    "office": '#90EE90',
+    "fast-food": '#FFB6C1',
+    "elevator": '#808080'
+};
+
 // 2. PreloadScene: load any assets (tilesets, background, etc.)
 class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -78,27 +100,37 @@ class MainScene extends Phaser.Scene {
 
     // 3.2 Create a simple tilemap for the “ground floor”
     //    (For now, we'll just draw a grid to illustrate, without a real tileset.)
-    const gridSize = 32;
-    const rows = Math.ceil(this.scale.height / gridSize);
-    const cols = Math.ceil(this.scale.width / gridSize);
+    const TILE_SIZE = 32; // Changed from gridSize
+    const rows = Math.ceil(this.scale.height / TILE_SIZE); // Changed from gridSize
+    const cols = Math.ceil(this.scale.width / TILE_SIZE); // Changed from gridSize
 
-    // Draw grid lines (for debugging / layout)
-    const graphics = this.add.graphics();
-    graphics.lineStyle(1, 0xcccccc, 0.5);
-    for (let i = 0; i <= cols; i++) {
-      graphics.moveTo(i * gridSize, 0);
-      graphics.lineTo(i * gridSize, this.scale.height);
+    // Create a blank tilemap
+    this.map = this.make.tilemap({ tileWidth: TILE_SIZE, tileHeight: TILE_SIZE, width: cols, height: rows });
+
+    // Add the tileset image to the map
+    // "tileset" is the name we gave to our tileset image key in PreloadScene
+    // 0 is the first GID (since our tileset is simple, GID 0 is fine, though typically it's 1 for the first tile)
+    const tileset = this.map.addTilesetImage("tileset", null, TILE_SIZE, TILE_SIZE, 0, 0);
+    if (!tileset) {
+        console.error("Failed to load tileset! Make sure 'tileset' is loaded in PreloadScene and the key matches.");
+        // Potentially add a visual indicator or stop further processing if critical
+        this.add.text(100, 100, "Error: Tileset not found!", { color: 'red', backgroundColor: 'white' });
+        return; // Stop further scene creation if tileset is missing
     }
-    for (let j = 0; j <= rows; j++) {
-      graphics.moveTo(0, j * gridSize);
-      graphics.lineTo(this.scale.width, j * gridSize);
+
+    // Create a layer for the construction
+    this.constructionLayer = this.map.createBlankLayer("ConstructionLayer", tileset, 0, 0, cols, rows);
+    if (!this.constructionLayer) {
+        console.error("Failed to create construction layer!");
+         this.add.text(100, 150, "Error: Could not create layer!", { color: 'red', backgroundColor: 'white' });
+        return; // Stop if layer creation fails
     }
-    graphics.strokePath();
+    this.constructionLayer.setCollisionByExclusion([-1]); // Makes all tiles on this layer collidable if needed later
 
     // 3.3 Placeholder NPC to show that sprites can move around
     this.tenant = this.physics.add.sprite(
-      gridSize * 2 + gridSize / 2,
-      gridSize * 2 + gridSize / 2,
+      TILE_SIZE * 2 + TILE_SIZE / 2, // Changed from gridSize
+      TILE_SIZE * 2 + TILE_SIZE / 2, // Changed from gridSize
       "tenant",
       0,
     );
@@ -108,7 +140,7 @@ class MainScene extends Phaser.Scene {
     // Create a simple walking animation for the tenant
     this.anims.create({
       key: "walk",
-      frames: this.anims.generateFrameNumbers("tenant", { start: 0, end: 3 }),
+      frames: this.anims.generateFrameNumbers("tenant", { start: 0, end: 1 }), // Changed end to 1
       frameRate: 6,
       repeat: -1,
     });
@@ -143,19 +175,24 @@ class MainScene extends Phaser.Scene {
 
     // 3.5 Example of making the grid interactive (click to “build” a placeholder tile)
     this.input.on("pointerdown", (pointer) => {
-      const worldPoint = pointer.positionToCamera(this.cameras.main);
-      const tileX = Math.floor(worldPoint.x / gridSize);
-      const tileY = Math.floor(worldPoint.y / gridSize);
+        const worldPoint = pointer.positionToCamera(this.cameras.main);
+        const tileX = this.map.worldToTileX(worldPoint.x);
+        const tileY = this.map.worldToTileY(worldPoint.y);
 
-      // Draw a simple colored rectangle at that grid cell to simulate “placing” a room
-      const rect = this.add.rectangle(
-        tileX * gridSize + gridSize / 2,
-        tileY * gridSize + gridSize / 2,
-        gridSize - 2,
-        gridSize - 2,
-        0x555555,
-      );
-      rect.setStrokeStyle(1, 0x000000);
+        // Check if the click is within the map bounds
+        if (tileX >= 0 && tileX < this.map.width && tileY >= 0 && tileY < this.map.height) {
+            // Place a tile (index 0 from our 'tileset' image) at the clicked location on the constructionLayer
+            // Our placeholder 'tileset.png' is a single 32x32 image, so its index is 0.
+            // If the tileset was a sheet of multiple tiles, you'd use different indices.
+            if (this.constructionLayer) { // Ensure layer exists
+                 this.constructionLayer.putTileAt(0, tileX, tileY);
+            } else {
+                 console.error("Construction layer is not available to put tile.");
+            }
+
+            // For debugging, log the tile placed
+            console.log(`Placed tile at [${tileX}, ${tileY}]`);
+        }
     });
 
     // 3.6 HUD: Simple overlay showing money, stars, etc.

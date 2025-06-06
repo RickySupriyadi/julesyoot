@@ -229,6 +229,7 @@ function gameLoop(timestamp) {
   requestAnimationFrame(gameLoop);
 }
 
+/*
 window.onload = () => {
   initializeGridDimensions();
   initializeBuildMenu();
@@ -238,3 +239,4 @@ window.onload = () => {
   lastEconomyUpdateTime = performance.now();
   gameLoop(performance.now());
 };
+*/
